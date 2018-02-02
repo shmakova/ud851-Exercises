@@ -27,7 +27,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
+
+import com.example.android.todolist.data.TaskContract;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -145,11 +148,17 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public Cursor loadInBackground() {
                 // Will implement to load data
+                try {
+                    return getContentResolver().query(TaskContract.TaskEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            TaskContract.TaskEntry.COLUMN_PRIORITY);
 
-                // TODO (5) Query and load all task data in the background; sort by priority
-                // [Hint] use a try/catch block to catch any errors in loading data
-
-                return null;
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to load data " + e.getMessage());
+                    return null;
+                }
             }
 
             // deliverResult sends the result of the load, a Cursor, to the registered listener
